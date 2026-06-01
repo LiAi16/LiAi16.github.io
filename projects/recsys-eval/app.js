@@ -34,7 +34,7 @@ function renderBanner() {
         <a href="../../index.html">← 返回主页</a>
         <a href="../recsys-eval.html">项目详情</a>
       </div>
-      <h1>Demo · 面向大模型增强推荐链路的能力评测与归因系统</h1>
+      <h1>面向大模型增强推荐链路的能力评测与归因系统</h1>
       <p>选一份预置样例，即可直接体验三级评测与异常归因，无需上传。</p>
     </div>
   `;

@@ -196,7 +196,7 @@ a:hover { text-decoration: underline; }
 }
 .pub .title { font-weight: 600; font-size: 1.08rem; line-height: 1.4; }
 .pub .authors { color: var(--text-soft); font-size: .98rem; margin-top: 3px; }
-.pub .authors .me { color: var(--text); font-weight: 600; border-bottom: 1.5px solid var(--accent); }
+.pub .authors .me { color: var(--text); font-weight: 600; }
 .pub .meta { color: var(--text-faint); font-size: .92rem; font-style: italic; margin-top: 2px; }
 .pub .tags { margin-top: 9px; font-family: var(--sans); font-size: .85rem; display: flex; gap: 10px; flex-wrap: wrap; }
 .pub .tags a {
