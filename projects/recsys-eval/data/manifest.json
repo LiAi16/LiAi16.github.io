@@ -1,0 +1,442 @@
+[
+  {
+    "id": "single_small",
+    "title": "单链路评测 · 小样本",
+    "desc": "32 条 trace 的经典推荐链路，适合快速体验单链路的端到端、业务过程与大模型增强三级评测。",
+    "mode": "single",
+    "primary_file": "sample_single_small.jsonl",
+    "primary_stats": {
+      "trace_count": 32,
+      "normal_count": 16,
+      "faulty_count": 16,
+      "error_count": 0,
+      "template_distribution": {
+        "classic": 32
+      }
+    },
+    "chain": {
+      "chain_types": [
+        {
+          "template_type": "classic",
+          "label": "经典推荐链路",
+          "sample_count": 32,
+          "modules": [
+            "intent",
+            "retrieval",
+            "ranking"
+          ]
+        }
+      ],
+      "structures": [
+        {
+          "template_type": "classic",
+          "label": "经典推荐链路",
+          "nodes": [
+            {
+              "id": "s1",
+              "label": "intent",
+              "subtitle": "intent_understanding",
+              "module": "intent"
+            },
+            {
+              "id": "s2",
+              "label": "retrieval",
+              "subtitle": "multi_recall",
+              "module": "retrieval"
+            },
+            {
+              "id": "s3",
+              "label": "retrieval",
+              "subtitle": "recall_merge_dedup",
+              "module": "retrieval"
+            },
+            {
+              "id": "s4",
+              "label": "retrieval",
+              "subtitle": "business_filter",
+              "module": "retrieval"
+            },
+            {
+              "id": "s5",
+              "label": "ranking",
+              "subtitle": "coarse_rank",
+              "module": "ranking"
+            },
+            {
+              "id": "s6",
+              "label": "ranking",
+              "subtitle": "fine_rank",
+              "module": "ranking"
+            },
+            {
+              "id": "s7",
+              "label": "ranking",
+              "subtitle": "strategy_layer",
+              "module": "ranking"
+            }
+          ],
+          "edges": [
+            {
+              "from": "s1",
+              "to": "s2"
+            },
+            {
+              "from": "s2",
+              "to": "s3"
+            },
+            {
+              "from": "s3",
+              "to": "s4"
+            },
+            {
+              "from": "s4",
+              "to": "s5"
+            },
+            {
+              "from": "s5",
+              "to": "s6"
+            },
+            {
+              "from": "s6",
+              "to": "s7"
+            }
+          ]
+        }
+      ],
+      "description": "系统已根据上传日志解析出推荐链路中的关键步骤，并生成链路结构图供确认。"
+    }
+  },
+  {
+    "id": "llm_composite",
+    "title": "大模型混合 / 复合增强链路",
+    "desc": "128 条 trace，偏重大模型混合链路与检索增强、智能体复合链路，突出工具调用与证据检索环节的能力评测。",
+    "mode": "single",
+    "primary_file": "sample_focus_llm_composite.jsonl",
+    "primary_stats": {
+      "trace_count": 128,
+      "normal_count": 64,
+      "faulty_count": 64,
+      "error_count": 0,
+      "template_distribution": {
+        "llm_hybrid": 128
+      }
+    },
+    "chain": {
+      "chain_types": [
+        {
+          "template_type": "llm_hybrid",
+          "label": "大模型混合推荐链路",
+          "sample_count": 128,
+          "modules": [
+            "intent",
+            "retrieval",
+            "ranking",
+            "generation"
+          ]
+        }
+      ],
+      "structures": [
+        {
+          "template_type": "llm_hybrid",
+          "label": "大模型混合推荐链路",
+          "nodes": [
+            {
+              "id": "s1",
+              "label": "intent",
+              "subtitle": "intent_understanding",
+              "module": "intent"
+            },
+            {
+              "id": "s2",
+              "label": "retrieval",
+              "subtitle": "candidate_recall",
+              "module": "retrieval"
+            },
+            {
+              "id": "s3",
+              "label": "retrieval",
+              "subtitle": "recall_merge",
+              "module": "retrieval"
+            },
+            {
+              "id": "s4",
+              "label": "ranking",
+              "subtitle": "candidate_pre_rank",
+              "module": "ranking"
+            },
+            {
+              "id": "s5",
+              "label": "generation",
+              "subtitle": "prompt_builder",
+              "module": "generation"
+            },
+            {
+              "id": "s6",
+              "label": "generation",
+              "subtitle": "llm_api_inference",
+              "module": "generation"
+            },
+            {
+              "id": "s7",
+              "label": "generation",
+              "subtitle": "llm_output_parser",
+              "module": "generation"
+            },
+            {
+              "id": "s8",
+              "label": "ranking",
+              "subtitle": "post_filter_rule_check",
+              "module": "ranking"
+            }
+          ],
+          "edges": [
+            {
+              "from": "s1",
+              "to": "s2"
+            },
+            {
+              "from": "s2",
+              "to": "s3"
+            },
+            {
+              "from": "s3",
+              "to": "s4"
+            },
+            {
+              "from": "s4",
+              "to": "s5"
+            },
+            {
+              "from": "s5",
+              "to": "s6"
+            },
+            {
+              "from": "s6",
+              "to": "s7"
+            },
+            {
+              "from": "s7",
+              "to": "s8"
+            }
+          ]
+        }
+      ],
+      "description": "系统已根据上传日志解析出推荐链路中的关键步骤，并生成链路结构图供确认。"
+    }
+  },
+  {
+    "id": "compare",
+    "title": "链路对比评测",
+    "desc": "上传两组 trace（主日志 192 条、对比日志 288 条），逐模块对比两版链路的提升与退化。",
+    "mode": "compare",
+    "primary_file": "sample_compare_primary.jsonl",
+    "primary_stats": {
+      "trace_count": 192,
+      "normal_count": 96,
+      "faulty_count": 96,
+      "error_count": 0,
+      "template_distribution": {
+        "classic": 128,
+        "llm_hybrid": 64
+      }
+    },
+    "chain": {
+      "chain_types": [
+        {
+          "template_type": "classic",
+          "label": "经典推荐链路",
+          "sample_count": 128,
+          "modules": [
+            "intent",
+            "retrieval",
+            "ranking"
+          ]
+        },
+        {
+          "template_type": "llm_hybrid",
+          "label": "大模型混合推荐链路",
+          "sample_count": 64,
+          "modules": [
+            "intent",
+            "retrieval",
+            "ranking",
+            "generation"
+          ]
+        }
+      ],
+      "structures": [
+        {
+          "template_type": "classic",
+          "label": "经典推荐链路",
+          "nodes": [
+            {
+              "id": "s1",
+              "label": "intent",
+              "subtitle": "intent_understanding",
+              "module": "intent"
+            },
+            {
+              "id": "s2",
+              "label": "retrieval",
+              "subtitle": "multi_recall",
+              "module": "retrieval"
+            },
+            {
+              "id": "s3",
+              "label": "retrieval",
+              "subtitle": "recall_merge_dedup",
+              "module": "retrieval"
+            },
+            {
+              "id": "s4",
+              "label": "retrieval",
+              "subtitle": "business_filter",
+              "module": "retrieval"
+            },
+            {
+              "id": "s5",
+              "label": "ranking",
+              "subtitle": "coarse_rank",
+              "module": "ranking"
+            },
+            {
+              "id": "s6",
+              "label": "ranking",
+              "subtitle": "fine_rank",
+              "module": "ranking"
+            },
+            {
+              "id": "s7",
+              "label": "ranking",
+              "subtitle": "strategy_layer",
+              "module": "ranking"
+            }
+          ],
+          "edges": [
+            {
+              "from": "s1",
+              "to": "s2"
+            },
+            {
+              "from": "s2",
+              "to": "s3"
+            },
+            {
+              "from": "s3",
+              "to": "s4"
+            },
+            {
+              "from": "s4",
+              "to": "s5"
+            },
+            {
+              "from": "s5",
+              "to": "s6"
+            },
+            {
+              "from": "s6",
+              "to": "s7"
+            }
+          ]
+        },
+        {
+          "template_type": "llm_hybrid",
+          "label": "大模型混合推荐链路",
+          "nodes": [
+            {
+              "id": "s1",
+              "label": "intent",
+              "subtitle": "intent_understanding",
+              "module": "intent"
+            },
+            {
+              "id": "s2",
+              "label": "retrieval",
+              "subtitle": "candidate_recall",
+              "module": "retrieval"
+            },
+            {
+              "id": "s3",
+              "label": "retrieval",
+              "subtitle": "recall_merge",
+              "module": "retrieval"
+            },
+            {
+              "id": "s4",
+              "label": "ranking",
+              "subtitle": "candidate_pre_rank",
+              "module": "ranking"
+            },
+            {
+              "id": "s5",
+              "label": "generation",
+              "subtitle": "prompt_builder",
+              "module": "generation"
+            },
+            {
+              "id": "s6",
+              "label": "generation",
+              "subtitle": "llm_api_inference",
+              "module": "generation"
+            },
+            {
+              "id": "s7",
+              "label": "generation",
+              "subtitle": "llm_output_parser",
+              "module": "generation"
+            },
+            {
+              "id": "s8",
+              "label": "ranking",
+              "subtitle": "post_filter_rule_check",
+              "module": "ranking"
+            }
+          ],
+          "edges": [
+            {
+              "from": "s1",
+              "to": "s2"
+            },
+            {
+              "from": "s2",
+              "to": "s3"
+            },
+            {
+              "from": "s3",
+              "to": "s4"
+            },
+            {
+              "from": "s4",
+              "to": "s5"
+            },
+            {
+              "from": "s5",
+              "to": "s6"
+            },
+            {
+              "from": "s6",
+              "to": "s7"
+            },
+            {
+              "from": "s7",
+              "to": "s8"
+            }
+          ]
+        }
+      ],
+      "description": "系统已根据上传日志解析出推荐链路中的关键步骤，并生成链路结构图供确认。"
+    },
+    "secondary_file": "sample_compare_secondary.jsonl",
+    "secondary_stats": {
+      "trace_count": 288,
+      "normal_count": 144,
+      "faulty_count": 144,
+      "error_count": 0,
+      "template_distribution": {
+        "classic": 64,
+        "llm_hybrid": 96,
+        "composite_enhanced": 128
+      }
+    }
+  }
+]

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Ai Li 本科毕业设计：面向大模型增强推荐链路的能力评测与归因研究——以电商场景为例。" />
+<title>Capability Evaluation &amp; Attribution for LLM-Enhanced Recommendation Pipelines · Ai Li</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../style.css" />
+<style>
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px 22px; color: var(--text-faint); font-family: var(--sans); font-size: .9rem; margin-top: 10px; }
+  .meta-row span { display: inline-flex; align-items: center; gap: 6px; }
+  .launch {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-top: 10px;
+    padding: 13px 22px; border-radius: 12px;
+    background: var(--accent); color: #fff; font-family: var(--sans); font-weight: 600; font-size: .98rem;
+    box-shadow: 0 8px 24px rgba(47,109,240,.28);
+  }
+  .launch:hover { text-decoration: none; filter: brightness(1.05); }
+  .launch svg { width: 18px; height: 18px; }
+  .result-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 8px 0 6px; }
+  .stat { border: 1px solid var(--line); border-radius: 12px; padding: 16px; background: var(--card); text-align: center; }
+  .stat b { display: block; font-size: 1.7rem; color: var(--accent); line-height: 1.2; }
+  .stat span { color: var(--text-soft); font-family: var(--sans); font-size: .85rem; }
+  .abstract { border-left: 3px solid var(--line); padding-left: 18px; color: var(--text-soft); text-align: justify; }
+  .abstract h3 { color: var(--text); font-size: 1.05rem; margin: 0 0 8px; }
+  details.abs { border: 1px solid var(--line); border-radius: 12px; padding: 4px 18px; background: var(--card); margin-bottom: 14px; }
+  details.abs summary { cursor: pointer; font-family: var(--sans); font-weight: 600; padding: 12px 0; color: var(--text); }
+  details.abs[open] summary { border-bottom: 1px solid var(--line); margin-bottom: 12px; }
+  details.abs p { text-align: justify; color: var(--text-soft); }
+  ul.clean { padding-left: 20px; }
+  ul.clean li { margin-bottom: 8px; }
+  @media (max-width: 640px) { .result-stats { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <a href="../index.html" class="brand">Ai Li</a>
+  <span class="divider">|</span>
+  <div class="links">
+    <a href="../index.html#bio">Bio</a>
+    <a href="../index.html#publications">Publications</a>
+    <a href="../index.html#education">Education</a>
+    <a href="../index.html#honors">Honors</a>
+    <a href="../projects.html" class="active">Projects</a>
+  </div>
+  <span class="spacer"></span>
+  <div class="icons">
+    <a href="mailto:lia396504@gmail.com" title="Email" aria-label="Email">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+    </a>
+    <a href="https://github.com/LiAi16" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05A9.4 9.4 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.05 10.05 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></svg>
+    </a>
+    <button id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">
+      <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</nav>
+
+<div class="wrap">
+  <a href="../projects.html" class="back-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m15 18-6-6 6-6"/></svg>
+    Back to projects
+  </a>
+
+  <section class="section" style="margin-top:22px">
+    <span class="pub" style="display:inline-block;padding:4px 11px;border-radius:999px;font-family:var(--sans);font-size:.72rem;font-weight:600;color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent);border:none;margin-bottom:12px;">本科毕业设计 · Undergraduate Thesis</span>
+    <h1 style="font-size:1.7rem;line-height:1.35;margin:0 0 6px;">面向大模型增强推荐链路的能力评测与归因研究<span style="color:var(--text-soft);font-weight:500;">——以电商场景为例</span></h1>
+    <p style="color:var(--text-soft);font-style:italic;margin:0;">Capability Evaluation and Attribution for Large Language Model-Enhanced Recommendation Pipelines: A Case Study of E-commerce Scenarios</p>
+    <div class="meta-row">
+      <span>Communication University of China</span>
+      <span>2026-04-10</span>
+      <span>电商推荐 · 推荐链路 · 能力评测 · 异常归因 · 大语言模型</span>
+    </div>
+  </section>
+
+  <section class="section" style="margin-top:30px">
+    <h2>概述</h2>
+    <p style="text-align:justify;">
+      随着大语言模型进入推荐系统的意图理解、候选召回、排序重排、知识检索、工具调用与结果生成等环节，
+      推荐链路已从相对固定的“召回—排序”流程演变为多类能力协同的复杂系统。现有评测大多只看点击率、转化率、
+      召回率、nDCG 等端到端指标，难以定位异常究竟来自哪个中间环节，也难以区分主要故障与下游级联影响。
+      本毕设面向<b>电商场景</b>，研究大模型增强推荐链路的<b>细粒度能力评测</b>与<b>异常归因</b>方法。
+    </p>
+    <p style="text-align:justify;">
+      工作以经典推荐链路、大模型混合链路、检索增强与智能体复合链路为对象，构建链路追踪日志表示，
+      将链路抽象为意图理解、候选召回、排序决策、智能体执行、系统工程等能力模块，并建立由
+      <b>端到端结果评测、业务过程评测、大模型增强过程评测</b>组成的三级评测体系，结合确定性指标、
+      LLM-as-a-judge 评分与人工标注信号进行离线评分；再利用模块依赖关系与分数变化模式对异常样例归因，
+      输出主要故障模块及其证据链。
+    </p>
+  </section>
+
+  <section class="section" style="margin-top:30px">
+    <h2>核心结果</h2>
+    <div class="result-stats">
+      <div class="stat"><b>79.17%</b><span>归因正确率</span></div>
+      <div class="stat"><b>79.17%</b><span>主故障识别率</span></div>
+      <div class="stat"><b>66.67%</b><span>级联故障区分率</span></div>
+    </div>
+    <p style="color:var(--text-soft);text-align:justify;">
+      在合成链路追踪日志与近真实业务样例上，通过模拟理解偏差、召回缺失、排序异常、工具失败与系统异常等受控扰动，
+      验证了指标体系的响应能力与归因方法的定位能力：所提方法不仅能反映推荐结果整体退化，
+      还能在对应能力模块上更早捕捉异常信号，并对主要故障与级联故障进行一定区分。
+    </p>
+  </section>
+
+  <section class="section" style="margin-top:30px">
+    <h2>在线 Demo</h2>
+    <p style="text-align:justify;">
+      我把论文中的评测平台做成了一个可直接体验的在线 Demo，并预置了几份实验用的 Trace 日志样例。
+      你无需上传数据，选择一个预置样例即可查看完整的三级评测结果、模块级指标与异常归因可视化。
+    </p>
+    <a class="launch" href="recsys-eval/index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      打开在线 Demo
+    </a>
+  </section>
+
+  <section class="section" style="margin-top:30px">
+    <h2>论文摘要</h2>
+    <details class="abs" open>
+      <summary>中文摘要</summary>
+      <p>随着大语言模型逐步进入推荐系统的意图理解、候选召回、排序重排、知识检索、工具调用和结果生成等环节，推荐链路已由传统相对固定的“召回—排序”流程演变为包含多类能力协同的复杂系统。现有评测方法主要关注点击率、转化率、召回率和归一化折损累计增益等端到端指标，能够反映系统整体效果变化，但难以进一步说明异常来自哪个中间环节，也难以区分主要故障与下游级联影响。与一般内容推荐或信息推荐相比，电商推荐链路不仅关注用户兴趣匹配，还同时受到商品库存、价格区间、促销活动、资源位规则、履约状态和转化目标等多重业务约束影响。因此，电商推荐结果的形成更依赖多环节协同与约束校验，也更需要面向中间过程的细粒度评测与归因分析。围绕这一问题，本文研究电商场景下大模型增强推荐链路的能力评测与异常归因方法。本文以经典推荐链路、大模型混合推荐链路以及检索增强与智能体复合链路为研究对象，构建链路追踪日志表示，并将链路过程抽象为意图理解、候选召回、排序决策、智能体执行和系统工程等能力模块。在此基础上，本文建立由端到端结果评测、业务过程评测和大模型增强过程评测组成的三级评测体系，结合确定性指标、大模型裁判评分与人工标注信号，对各能力模块进行离线评分；进一步利用模块依赖关系和分数变化模式，对异常样例进行归因分析，输出主要故障模块及其证据链。</p>
+      <p>实验基于合成链路追踪日志和近真实业务样例开展。通过模拟理解偏差、召回缺失、排序异常、工具失败和系统异常等受控扰动，本文验证了所提指标体系的响应能力和归因方法的定位能力。结果表明，所提方法不仅能够反映推荐结果的整体退化，还能够在对应能力模块上更早捕捉异常信号，并对主要故障与级联故障进行一定区分。其中，归因正确率为 79.17%，主要故障识别率为 79.17%，级联故障区分率为 66.67%。本文为大模型增强推荐链路的中间过程分析、异常诊断和问题定位提供了一种可操作的评测与归因框架，也为电商场景下复杂推荐链路的评估与优化提供了参考。</p>
+      <p style="color:var(--text-faint);"><b>关键词：</b>电商推荐；推荐链路；能力评测；异常归因；大语言模型</p>
+    </details>
+    <details class="abs">
+      <summary>English Abstract</summary>
+      <p>As large language models are increasingly integrated into multiple stages of recommender systems, including intent understanding, candidate retrieval, ranking and reranking, knowledge retrieval, tool calling, and result generation, recommendation pipelines have evolved from relatively fixed "retrieval–ranking" workflows into complex systems involving the collaboration of multiple capabilities. Existing evaluation methods mainly focus on end-to-end metrics such as click-through rate, conversion rate, recall, and normalized discounted cumulative gain. These metrics can reflect overall performance changes, but they are insufficient for identifying which intermediate stage causes an anomaly or for distinguishing primary faults from downstream cascading effects. Compared with general content or information recommendation, e-commerce recommendation pipelines not only focus on user-interest matching, but are also affected by multiple business constraints, such as product inventory, price range, promotional activities, display-slot rules, fulfillment status, and conversion objectives. Therefore, the formation of e-commerce recommendation results relies more heavily on multi-stage collaboration and constraint verification, which further requires fine-grained evaluation and attribution analysis of intermediate processes. To address this issue, this study investigates capability evaluation and anomaly attribution methods for large language model-enhanced recommendation pipelines in e-commerce scenarios.</p>
+      <p>This study takes classical recommendation pipelines, large language model-hybrid recommendation pipelines, and retrieval-augmented and agent-based composite pipelines as research objects. It constructs a trace-log representation of recommendation pipelines and abstracts the pipeline process into capability modules, including intent understanding, candidate retrieval, ranking decision-making, agent execution, and system engineering. On this basis, this study establishes a three-level evaluation framework consisting of end-to-end outcome evaluation, business process evaluation, and large language model-enhanced process evaluation. By combining deterministic metrics, LLM-as-a-judge scoring, and human annotation signals, the proposed framework performs offline scoring for each capability module. Furthermore, anomaly attribution is conducted based on module dependency relationships and score variation patterns, so as to identify the primary faulty module and provide its corresponding evidence chain.</p>
+      <p>Experiments are conducted based on synthetic trace logs and near-real business cases. Through controlled perturbation simulations involving understanding deviation, retrieval omission, ranking abnormality, tool failure, and system abnormality, this study validates the responsiveness of the proposed metric framework and the localization capability of the attribution method. The results show that the proposed method can not only reflect the overall degradation of recommendation outcomes, but also capture abnormal signals earlier in the corresponding capability modules and distinguish primary faults from cascading faults to a certain extent. Specifically, the attribution accuracy reaches 79.17%, the primary fault identification rate reaches 79.17%, and the cascading fault discrimination rate reaches 66.67%. This study provides an operational evaluation and attribution framework for intermediate-process analysis, anomaly diagnosis, and problem localization in large language model-enhanced recommendation pipelines. It also offers a reference for evaluating and optimizing complex recommendation pipelines in e-commerce scenarios.</p>
+    </details>
+  </section>
+
+  <div class="footer">
+    &copy; 2026 Ai Li · Last updated Jun 2026
+  </div>
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var saved = localStorage.getItem("theme");
+  var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  setTheme(saved || (prefersDark ? "dark" : "light"));
+  function setTheme(t) {
+    root.setAttribute("data-theme", t);
+    localStorage.setItem("theme", t);
+    var icon = document.getElementById("theme-icon");
+    if (icon) {
+      icon.innerHTML = t === "dark"
+        ? '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>'
+        : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    }
+  }
+  document.getElementById("theme-toggle")?.addEventListener("click", function () {
+    setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+  });
+  var nav = document.getElementById("nav");
+  window.addEventListener("scroll", function () {
+    if (window.scrollY > 8) nav.classList.add("scrolled"); else nav.classList.remove("scrolled");
+  });
+})();
+</script>
+</body>
+</html>

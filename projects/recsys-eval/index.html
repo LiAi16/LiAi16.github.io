@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>在线 Demo · 大模型增强推荐链路能力评测与归因系统</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .demo-banner {
+      background: linear-gradient(120deg, #1d4ed8, #4f46e5);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .demo-banner .crumbs { font-size: 13px; opacity: .9; margin-bottom: 10px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .demo-banner .crumbs a { color: #fff; text-decoration: underline; }
+    .demo-banner h1 { margin: 0 0 8px; font-size: 24px; }
+    .demo-banner p { margin: 0; opacity: .92; line-height: 1.7; max-width: 880px; }
+    .demo-note {
+      background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af;
+      border-radius: 14px; padding: 12px 14px; font-size: 13px; line-height: 1.7; margin-bottom: 18px;
+    }
+    .preset-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+    .preset-card { display: flex; flex-direction: column; gap: 12px; }
+    .preset-card .mode-pill { align-self: flex-start; }
+    .preset-card .stat-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .preset-card .mini-kv { background: #fafcff; border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; font-size: 13px; }
+    .preset-card .mini-kv b { display: block; font-size: 18px; }
+    .preset-card .spacer { flex: 1; }
+    .struct-wrap { display: grid; gap: 14px; }
+    .selected-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+    @media (max-width: 680px) { .preset-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="app.js"></script>
+</body>
+</html>
