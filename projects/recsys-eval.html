@@ -33,7 +33,44 @@
   details.abs p { text-align: justify; color: var(--text-soft); }
   ul.clean { padding-left: 20px; }
   ul.clean li { margin-bottom: 8px; }
-  @media (max-width: 640px) { .result-stats { grid-template-columns: 1fr; } }
+
+  /* framework diagram */
+  .fig {
+    border: 1px solid var(--line); border-radius: 14px; background: var(--card);
+    padding: 22px 20px; margin-top: 6px; font-family: var(--sans);
+  }
+  .fig-cap { color: var(--text-faint); font-size: .85rem; text-align: center; margin-top: 14px; }
+  .fig-row { display: flex; align-items: stretch; justify-content: center; gap: 8px; flex-wrap: wrap; }
+  .fig-stage {
+    flex: 1 1 0; min-width: 92px; text-align: center;
+    padding: 11px 8px; border-radius: 10px; font-size: .9rem; font-weight: 600;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, transparent); color: var(--text);
+  }
+  .fig-arrow-down { text-align: center; color: var(--text-faint); font-size: .82rem; margin: 12px 0; }
+  .fig-arrow-down b { color: var(--text-soft); }
+  .fig-levels { display: grid; gap: 10px; }
+  .fig-level {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; background: var(--bg);
+  }
+  .fig-level .lv-no {
+    flex: none; width: 26px; height: 26px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--accent); color: #fff; font-size: .82rem; font-weight: 700;
+  }
+  .fig-level .lv-name { font-weight: 600; min-width: 132px; }
+  .fig-level .lv-desc { color: var(--text-soft); font-size: .88rem; }
+  .fig-attr {
+    margin-top: 14px; border: 1px dashed color-mix(in srgb, var(--accent) 45%, var(--line));
+    border-radius: 10px; padding: 13px 16px; text-align: center;
+    background: color-mix(in srgb, var(--accent) 6%, transparent); font-size: .92rem;
+  }
+  .fig-attr b { color: var(--accent); }
+  @media (max-width: 640px) {
+    .result-stats { grid-template-columns: 1fr; }
+    .fig-stage { flex-basis: 40%; }
+  }
 </style>
 </head>
 <body>
@@ -80,7 +117,7 @@
   </section>
 
   <section class="section" style="margin-top:30px">
-    <h2>一句话概述</h2>
+    <h2>项目概述</h2>
     <p style="text-align:justify;">
       推荐链路接入大模型后，点击率、nDCG 等<b>端到端指标只能告诉你“变差了”，却说不清“坏在哪一步”</b>。
       本毕设面向电商场景，把推荐链路拆成意图理解、候选召回、排序决策、智能体执行等<b>能力模块</b>，
@@ -91,6 +128,41 @@
       <li><b>评测体系</b>：端到端结果评测 → 业务过程评测 → 大模型增强过程评测，三级逐层下钻。</li>
       <li><b>异常归因</b>：基于模块依赖与分数变化，定位主要故障模块并给出证据链。</li>
     </ul>
+  </section>
+
+  <section class="section" style="margin-top:30px">
+    <h2>评测框架</h2>
+    <div class="fig">
+      <div class="fig-row">
+        <div class="fig-stage">意图理解</div>
+        <div class="fig-stage">候选召回</div>
+        <div class="fig-stage">排序决策</div>
+        <div class="fig-stage">智能体执行</div>
+        <div class="fig-stage">结果生成</div>
+      </div>
+      <div class="fig-arrow-down">↓ &nbsp;统一抽象为<b>能力模块</b>，构建<b>链路追踪日志</b>&nbsp; ↓</div>
+      <div class="fig-levels">
+        <div class="fig-level">
+          <span class="lv-no">1</span>
+          <span class="lv-name">端到端结果评测</span>
+          <span class="lv-desc">CTR · 转化率 · Recall · nDCG 等整体指标</span>
+        </div>
+        <div class="fig-level">
+          <span class="lv-no">2</span>
+          <span class="lv-name">业务过程评测</span>
+          <span class="lv-desc">库存 / 价格 / 促销 / 资源位 / 履约等约束校验</span>
+        </div>
+        <div class="fig-level">
+          <span class="lv-no">3</span>
+          <span class="lv-name">大模型增强过程评测</span>
+          <span class="lv-desc">确定性指标 + LLM-as-a-judge + 人工标注，逐模块离线评分</span>
+        </div>
+      </div>
+      <div class="fig-attr">
+        <b>异常归因</b>：基于模块依赖关系与分数变化模式 → 定位<b>主要故障模块</b>，给出证据链，并区分级联影响
+      </div>
+      <div class="fig-cap">图 1 · 三级评测体系与异常归因框架</div>
+    </div>
   </section>
 
   <section class="section" style="margin-top:30px">
@@ -108,9 +180,6 @@
 
   <section class="section" style="margin-top:30px">
     <h2>在线 Demo</h2>
-    <p style="text-align:justify;">
-      我把论文里的评测平台做成了可直接体验的在线 Demo，预置了几份样例日志——无需上传，选一个即可看完整的评测结果与归因可视化。
-    </p>
     <a class="launch" href="recsys-eval/index.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
       打开在线 Demo
