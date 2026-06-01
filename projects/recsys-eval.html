@@ -80,20 +80,17 @@
   </section>
 
   <section class="section" style="margin-top:30px">
-    <h2>概述</h2>
+    <h2>一句话概述</h2>
     <p style="text-align:justify;">
-      随着大语言模型进入推荐系统的意图理解、候选召回、排序重排、知识检索、工具调用与结果生成等环节，
-      推荐链路已从相对固定的“召回—排序”流程演变为多类能力协同的复杂系统。现有评测大多只看点击率、转化率、
-      召回率、nDCG 等端到端指标，难以定位异常究竟来自哪个中间环节，也难以区分主要故障与下游级联影响。
-      本毕设面向<b>电商场景</b>，研究大模型增强推荐链路的<b>细粒度能力评测</b>与<b>异常归因</b>方法。
+      推荐链路接入大模型后，点击率、nDCG 等<b>端到端指标只能告诉你“变差了”，却说不清“坏在哪一步”</b>。
+      本毕设面向电商场景，把推荐链路拆成意图理解、候选召回、排序决策、智能体执行等<b>能力模块</b>，
+      用一套<b>三级评测 + 异常归因</b>的方法，把问题定位到具体环节，并区分主要故障与下游级联影响。
     </p>
-    <p style="text-align:justify;">
-      工作以经典推荐链路、大模型混合链路、检索增强与智能体复合链路为对象，构建链路追踪日志表示，
-      将链路抽象为意图理解、候选召回、排序决策、智能体执行、系统工程等能力模块，并建立由
-      <b>端到端结果评测、业务过程评测、大模型增强过程评测</b>组成的三级评测体系，结合确定性指标、
-      LLM-as-a-judge 评分与人工标注信号进行离线评分；再利用模块依赖关系与分数变化模式对异常样例归因，
-      输出主要故障模块及其证据链。
-    </p>
+    <ul class="clean" style="margin-top:14px;">
+      <li><b>研究对象</b>：经典推荐链路、大模型混合链路、检索增强与智能体复合链路。</li>
+      <li><b>评测体系</b>：端到端结果评测 → 业务过程评测 → 大模型增强过程评测，三级逐层下钻。</li>
+      <li><b>异常归因</b>：基于模块依赖与分数变化，定位主要故障模块并给出证据链。</li>
+    </ul>
   </section>
 
   <section class="section" style="margin-top:30px">
@@ -104,17 +101,15 @@
       <div class="stat"><b>66.67%</b><span>级联故障区分率</span></div>
     </div>
     <p style="color:var(--text-soft);text-align:justify;">
-      在合成链路追踪日志与近真实业务样例上，通过模拟理解偏差、召回缺失、排序异常、工具失败与系统异常等受控扰动，
-      验证了指标体系的响应能力与归因方法的定位能力：所提方法不仅能反映推荐结果整体退化，
-      还能在对应能力模块上更早捕捉异常信号，并对主要故障与级联故障进行一定区分。
+      在受控扰动实验中，过程评测能比端到端指标<b>更早</b>捕捉异常信号，发现“端到端看不见”的隐藏故障，
+      并对主要故障与级联故障做出一定区分。
     </p>
   </section>
 
   <section class="section" style="margin-top:30px">
     <h2>在线 Demo</h2>
     <p style="text-align:justify;">
-      我把论文中的评测平台做成了一个可直接体验的在线 Demo，并预置了几份实验用的 Trace 日志样例。
-      你无需上传数据，选择一个预置样例即可查看完整的三级评测结果、模块级指标与异常归因可视化。
+      我把论文里的评测平台做成了可直接体验的在线 Demo，预置了几份样例日志——无需上传，选一个即可看完整的评测结果与归因可视化。
     </p>
     <a class="launch" href="recsys-eval/index.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
@@ -122,24 +117,9 @@
     </a>
   </section>
 
-  <section class="section" style="margin-top:30px">
-    <h2>论文摘要</h2>
-    <details class="abs" open>
-      <summary>中文摘要</summary>
-      <p>随着大语言模型逐步进入推荐系统的意图理解、候选召回、排序重排、知识检索、工具调用和结果生成等环节，推荐链路已由传统相对固定的“召回—排序”流程演变为包含多类能力协同的复杂系统。现有评测方法主要关注点击率、转化率、召回率和归一化折损累计增益等端到端指标，能够反映系统整体效果变化，但难以进一步说明异常来自哪个中间环节，也难以区分主要故障与下游级联影响。与一般内容推荐或信息推荐相比，电商推荐链路不仅关注用户兴趣匹配，还同时受到商品库存、价格区间、促销活动、资源位规则、履约状态和转化目标等多重业务约束影响。因此，电商推荐结果的形成更依赖多环节协同与约束校验，也更需要面向中间过程的细粒度评测与归因分析。围绕这一问题，本文研究电商场景下大模型增强推荐链路的能力评测与异常归因方法。本文以经典推荐链路、大模型混合推荐链路以及检索增强与智能体复合链路为研究对象，构建链路追踪日志表示，并将链路过程抽象为意图理解、候选召回、排序决策、智能体执行和系统工程等能力模块。在此基础上，本文建立由端到端结果评测、业务过程评测和大模型增强过程评测组成的三级评测体系，结合确定性指标、大模型裁判评分与人工标注信号，对各能力模块进行离线评分；进一步利用模块依赖关系和分数变化模式，对异常样例进行归因分析，输出主要故障模块及其证据链。</p>
-      <p>实验基于合成链路追踪日志和近真实业务样例开展。通过模拟理解偏差、召回缺失、排序异常、工具失败和系统异常等受控扰动，本文验证了所提指标体系的响应能力和归因方法的定位能力。结果表明，所提方法不仅能够反映推荐结果的整体退化，还能够在对应能力模块上更早捕捉异常信号，并对主要故障与级联故障进行一定区分。其中，归因正确率为 79.17%，主要故障识别率为 79.17%，级联故障区分率为 66.67%。本文为大模型增强推荐链路的中间过程分析、异常诊断和问题定位提供了一种可操作的评测与归因框架，也为电商场景下复杂推荐链路的评估与优化提供了参考。</p>
-      <p style="color:var(--text-faint);"><b>关键词：</b>电商推荐；推荐链路；能力评测；异常归因；大语言模型</p>
-    </details>
-    <details class="abs">
-      <summary>English Abstract</summary>
-      <p>As large language models are increasingly integrated into multiple stages of recommender systems, including intent understanding, candidate retrieval, ranking and reranking, knowledge retrieval, tool calling, and result generation, recommendation pipelines have evolved from relatively fixed "retrieval–ranking" workflows into complex systems involving the collaboration of multiple capabilities. Existing evaluation methods mainly focus on end-to-end metrics such as click-through rate, conversion rate, recall, and normalized discounted cumulative gain. These metrics can reflect overall performance changes, but they are insufficient for identifying which intermediate stage causes an anomaly or for distinguishing primary faults from downstream cascading effects. Compared with general content or information recommendation, e-commerce recommendation pipelines not only focus on user-interest matching, but are also affected by multiple business constraints, such as product inventory, price range, promotional activities, display-slot rules, fulfillment status, and conversion objectives. Therefore, the formation of e-commerce recommendation results relies more heavily on multi-stage collaboration and constraint verification, which further requires fine-grained evaluation and attribution analysis of intermediate processes. To address this issue, this study investigates capability evaluation and anomaly attribution methods for large language model-enhanced recommendation pipelines in e-commerce scenarios.</p>
-      <p>This study takes classical recommendation pipelines, large language model-hybrid recommendation pipelines, and retrieval-augmented and agent-based composite pipelines as research objects. It constructs a trace-log representation of recommendation pipelines and abstracts the pipeline process into capability modules, including intent understanding, candidate retrieval, ranking decision-making, agent execution, and system engineering. On this basis, this study establishes a three-level evaluation framework consisting of end-to-end outcome evaluation, business process evaluation, and large language model-enhanced process evaluation. By combining deterministic metrics, LLM-as-a-judge scoring, and human annotation signals, the proposed framework performs offline scoring for each capability module. Furthermore, anomaly attribution is conducted based on module dependency relationships and score variation patterns, so as to identify the primary faulty module and provide its corresponding evidence chain.</p>
-      <p>Experiments are conducted based on synthetic trace logs and near-real business cases. Through controlled perturbation simulations involving understanding deviation, retrieval omission, ranking abnormality, tool failure, and system abnormality, this study validates the responsiveness of the proposed metric framework and the localization capability of the attribution method. The results show that the proposed method can not only reflect the overall degradation of recommendation outcomes, but also capture abnormal signals earlier in the corresponding capability modules and distinguish primary faults from cascading faults to a certain extent. Specifically, the attribution accuracy reaches 79.17%, the primary fault identification rate reaches 79.17%, and the cascading fault discrimination rate reaches 66.67%. This study provides an operational evaluation and attribution framework for intermediate-process analysis, anomaly diagnosis, and problem localization in large language model-enhanced recommendation pipelines. It also offers a reference for evaluating and optimizing complex recommendation pipelines in e-commerce scenarios.</p>
-    </details>
-  </section>
-
   <div class="footer">
     &copy; 2026 Ai Li · Last updated Jun 2026
+    <div style="margin-top:6px;font-size:.82rem;">Webpage template borrows from <a href="https://xiaohao-liu.github.io/" target="_blank" rel="noopener">Xiaohao Liu</a>.</div>
   </div>
 </div>
 
