@@ -1,8 +1,8 @@
 # OS / editor
 .DS_Store
 
-# Thesis source project (kept locally, not published).
-# The live demo is self-contained under projects/recsys-eval/.
-recsys_eval_platform_v3 2/
+# Python caches / runtime artifacts of the thesis source
 __pycache__/
 *.pyc
+projects/recsys-eval-source/backend/data/
+projects/recsys-eval-source/generated/
