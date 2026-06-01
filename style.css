@@ -153,7 +153,8 @@ a:hover { text-decoration: underline; }
 }
 .contact .item { display: inline-flex; align-items: center; gap: 8px; color: var(--text); }
 .contact .item svg { width: 17px; height: 17px; color: var(--text-soft); }
-.contact a.item:hover { color: var(--accent); text-decoration: none; }
+.contact a.item:hover, .contact button.item:hover { color: var(--accent); text-decoration: none; }
+.contact button.item { background: none; border: none; cursor: pointer; font: inherit; }
 .contact .copy-btn {
   background: none; border: none; cursor: pointer; color: var(--text-faint);
   display: inline-flex; padding: 2px;
@@ -222,6 +223,7 @@ a:hover { text-decoration: underline; }
   transition: background-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 .project:hover { background: var(--card-hover); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(20,30,60,.08); }
+a.project, a.project:hover, a.project * { text-decoration: none; }
 .project h3 { margin: 0 0 4px; font-size: 1.18rem; font-weight: 600; }
 .project .sub { color: var(--text-faint); font-family: var(--sans); font-size: .85rem; margin-bottom: 10px; }
 .project p { margin: 0 0 8px; }
